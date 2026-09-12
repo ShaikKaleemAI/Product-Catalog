@@ -1,5 +1,7 @@
 # Index Four
 
+**Live demo:** [my-catlog.netlify.app](https://my-catlog.netlify.app)
+
 A multi-page e-commerce product catalog built with React, React Router, and
 [FakeStoreAPI](https://fakestoreapi.com) — redesigned around a single idea:
 **every product lives on one of four color-coded channels**, and that color
