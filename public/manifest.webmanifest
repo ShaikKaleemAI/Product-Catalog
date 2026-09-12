@@ -1,0 +1,10 @@
+{
+  "name": "Index Four — A Catalog in Four Channels",
+  "short_name": "Index Four",
+  "description": "A browsable, color-coded index of goods across four channels.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F7F6F2",
+  "theme_color": "#0F0F14",
+  "icons": [{ "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }]
+}
