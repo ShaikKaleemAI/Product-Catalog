@@ -1,0 +1,171 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: 247 246 242;
+  --bg-subtle: 238 236 229;
+  --ink: 16 16 20;
+  --ink-muted: 111 109 101;
+  --rule: 223 220 210;
+  --sale: 190 60 46;
+
+  /* The spectrum — one fixed accent per catalog channel, stable across themes */
+  --c-circuit: 61 90 254;   /* electronics */
+  --c-ember: 190 130 40;    /* jewelery */
+  --c-moss: 84 116 85;      /* men's clothing */
+  --c-clay: 181 90 76;      /* women's clothing */
+
+  /* --channel is the *active* accent — swapped by JS to whichever channel
+     is focused/filtered. Everything that should react to channel context
+     (rails, glows, active pills) reads from this one variable. */
+  --channel: var(--c-circuit);
+}
+
+.dark {
+  --bg: 12 12 15;
+  --bg-subtle: 20 20 24;
+  --ink: 240 239 234;
+  --ink-muted: 154 152 143;
+  --rule: 40 40 46;
+  --sale: 255 120 100;
+
+  --c-circuit: 116 138 255;
+  --c-ember: 214 158 70;
+  --c-moss: 130 168 130;
+  --c-clay: 214 130 114;
+}
+
+* {
+  border-color: rgb(var(--rule));
+}
+
+html {
+  scroll-behavior: smooth;
+  color-scheme: light;
+}
+html.dark {
+  color-scheme: dark;
+}
+
+body {
+  background-color: rgb(var(--bg));
+  color: rgb(var(--ink));
+  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Skip link — hidden until keyboard-focused, first thing in tab order */
+.skip-link {
+  position: fixed;
+  top: -3.5rem;
+  left: 1rem;
+  z-index: 200;
+  background: rgb(var(--ink));
+  color: rgb(var(--bg));
+  padding: 0.75rem 1.25rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: top 0.2s ease;
+}
+.skip-link:focus {
+  top: 1rem;
+}
+
+:focus-visible {
+  outline: 2px solid rgb(var(--channel));
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+::selection {
+  background: rgb(var(--channel) / 0.22);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+.eyebrow {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+.rule {
+  border-top: 1px solid rgb(var(--rule));
+}
+
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgb(var(--rule)); border-radius: 999px; }
+
+.skeleton {
+  background-image: linear-gradient(90deg, rgb(var(--bg-subtle)) 0%, rgb(var(--rule)) 50%, rgb(var(--bg-subtle)) 100%);
+  background-size: 800px 100%;
+  background-repeat: no-repeat;
+}
+
+.no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+
+.hero-heading {
+  font-size: clamp(2.75rem, 7.4vw, 6.25rem);
+  line-height: 0.96;
+}
+
+/* Ambient channel wash — a very soft radial tint behind the page content,
+   driven by --channel. Subtle by design: it should read as atmosphere,
+   not as a colored background. */
+.channel-wash {
+  position: relative;
+}
+.channel-wash::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: radial-gradient(
+    900px 480px at 15% 0%,
+    rgb(var(--channel) / 0.10),
+    transparent 60%
+  );
+  transition: background 0.5s ease;
+  pointer-events: none;
+}
+.dark .channel-wash::before {
+  background: radial-gradient(
+    900px 480px at 15% 0%,
+    rgb(var(--channel) / 0.16),
+    transparent 60%
+  );
+}
+
+/* Spectrum rail — the signature wayfinding strip. A thin bar made of four
+   fixed segments (one per channel), used in the header and echoed in the
+   hero. Never decorative-only: each segment is always a real link/filter. */
+.spectrum-rail {
+  display: flex;
+  height: 4px;
+  width: 100%;
+}
+.spectrum-rail > span {
+  flex: 1 1 0%;
+  transition: flex-grow 0.35s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.35s ease;
+}
+
+/* Faint broadcast-static texture, used only behind empty/error/404 states
+   to reinforce the "off-channel" idea without touching the rest of the UI. */
+.static-noise {
+  background-image:
+    repeating-linear-gradient(0deg, rgb(var(--ink) / 0.035) 0px, transparent 1px, transparent 2px);
+  background-size: 100% 3px;
+}
